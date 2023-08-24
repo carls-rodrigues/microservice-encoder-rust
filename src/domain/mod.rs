@@ -1,4 +1,5 @@
-mod video;
+pub use job::Job;
+pub use video::Video;
+
 mod job;
-mod video_test;
-mod job_test;
+mod video;

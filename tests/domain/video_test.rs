@@ -2,7 +2,9 @@
 mod tests {
     use chrono::Utc;
     use uuid::Uuid;
-    use crate::domain::video::Video;
+
+    use rust_video_encoder_service::domain::Video;
+
     #[test]
     fn test_validate_if_video_is_empty() {
         let video = Video::new(
@@ -35,7 +37,10 @@ mod tests {
             Utc::now().naive_utc(),
         );
         assert!(video.validate().is_err());
-        assert_eq!(video.validate().unwrap_err(), "Resource id is empty or invalid");
+        assert_eq!(
+            video.validate().unwrap_err(),
+            "Resource id is empty or invalid"
+        );
     }
 
     #[test]
