@@ -1,65 +1,35 @@
-use diesel::pg::PgConnection;
-use diesel::prelude::*;
-use diesel::sqlite::SqliteConnection;
 use dotenvy::dotenv;
+use sqlx::{Connection, PgPool};
 
-pub struct Database<'a, T> {
-    db: &'a dyn Connection<Backend = T, TransactionManager = ()>,
-    dsn: String,
-    dsn_test: String,
-    db_type: String,
-    db_type_test: String,
+// todo: impl interfaces for other databases
+pub struct Database {
+    database_url: String,
     debug: bool,
-    auto_migrate: bool,
     env: String,
 }
 
-impl<'a, T> Database<'a, T> {
-    pub fn new(
-        db: &'a dyn Connection<Backend = T, TransactionManager = ()>,
-        dsn: String,
-        dsn_test: String,
-        db_type: String,
-        db_type_test: String,
-        debug: bool,
-        auto_migrate: bool,
-        env: String,
-    ) -> Self {
+impl Database {
+    pub fn new(database_url: String, debug: bool, env: String) -> Self {
         Self {
-            db,
-            dsn,
-            dsn_test,
-            db_type,
-            db_type_test,
+            database_url,
             debug,
-            auto_migrate,
             env,
         }
     }
-    pub fn new_db_test(&self) -> &'a dyn Connection<Backend = T, TransactionManager = ()> {
-        let db_instance = Database::new(
-            self.establish_pg_connection(),
-            "".to_string(),
-            ":memory".to_string(),
-            "".to_string(),
-            "sqlite3".to_string(),
+    pub async fn new_db_test() -> PgPool {
+        let db = Database::new(
+            "postgres://postgres:root@localhost:5432/encoder?sslmode=disable".to_string(),
             true,
-            false,
             "test".to_string(),
         );
-        let connection = db_instance.db;
+        let connection = Database::establish_pg_connection(&db).await;
         connection
     }
 
-    pub fn establish_pg_connection(
-        &self,
-    ) -> &'a dyn Connection<Backend = T, TransactionManager = ()> {
+    pub async fn establish_pg_connection(&self) -> PgPool {
         dotenv().ok();
-        if self.env != "production" {
-            return &PgConnection::establish(&self.dsn)
-                .expect(&format!("Error connecting to {}", self.db_type));
-        }
-        return &SqliteConnection::establish(&self.dsn_test)
-            .expect(&format!("Error connecting to {}", self.db_type_test));
+        return PgPool::connect(&self.database_url)
+            .await
+            .expect(&format!("Error connecting to {}", self.database_url));
     }
 }

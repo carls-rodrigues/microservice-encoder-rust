@@ -14,7 +14,13 @@ mod tests {
             chrono::Utc::now().naive_utc(),
         );
 
-        let job = Job::new("any_output".to_string(), "any_status".to_string(), &video).unwrap();
+        let job = Job::new(
+            "any_output".to_string(),
+            "any_status".to_string(),
+            &video,
+            Uuid::new_v4().to_string(),
+        )
+        .unwrap();
 
         assert!(job.validate(&job).is_ok())
     }
