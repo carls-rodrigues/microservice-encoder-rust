@@ -112,7 +112,7 @@ impl<'a> JobRepository<'a> for JobRepositoryImplementation {
         };
     }
 
-    async fn update(&self, job: &'a Job<'a>) -> Result<Job<'a>, String> {
+    async fn update(&self, _job: &'a Job<'a>) -> Result<Job<'a>, String> {
         todo!()
         // return match sqlx::query(
         //     r#"

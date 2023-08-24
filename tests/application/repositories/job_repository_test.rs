@@ -25,7 +25,7 @@ mod tests {
         );
 
         let repository_db = VideoRepositoryImplementation::instance(&db);
-        let insert_video = repository_db.insert(&video).await;
+        let _insert_video = repository_db.insert(&video).await;
         let job_repository = JobRepositoryImplementation::instance(&db);
         job_repository.insert(&job.unwrap()).await.unwrap();
     }
