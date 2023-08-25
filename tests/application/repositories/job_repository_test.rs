@@ -22,11 +22,15 @@ mod tests {
             "Pending".to_string(),
             &video,
             video.id().to_string(),
-        );
+        )
+        .unwrap();
 
         let repository_db = VideoRepositoryImplementation::instance(&db);
-        let _insert_video = repository_db.insert(&video).await;
+        let _ = repository_db.insert(&video).await;
         let job_repository = JobRepositoryImplementation::instance(&db);
-        job_repository.insert(&job.unwrap()).await.unwrap();
+        job_repository.insert(&job.clone()).await.unwrap();
+        let get_job = job_repository.find_by_id(&job.clone().id()).await.unwrap();
+        assert_eq!(get_job.id(), job.clone().id());
+        assert_eq!(get_job.video_id(), job.clone().video_id());
     }
 }
