@@ -112,20 +112,31 @@ impl<'a> JobRepository<'a> for JobRepositoryImplementation {
         };
     }
 
-    async fn update(&self, _job: &'a Job<'a>) -> Result<Job<'a>, String> {
-        todo!()
-        // return match sqlx::query(
-        //     r#"
-        //         UPDATE jobs SET
-        //             output_bucket_path = $1,
-        //             status = $2,
-        //             video_id = $3,
-        //             error = $4,
-        //             created_at = $5,
-        //             updated_at = $6
-        //         WHERE id = $7
-        //     "#
-        // )
-        //     .bind(&job.output_bucket_path())
+    async fn update(&self, job: &'a Job<'a>) -> Result<Job<'a>, String> {
+        return match sqlx::query(
+            r#"
+                UPDATE jobs SET
+                    output_bucket_path = $3,
+                    status = $4,
+                    error = $5,
+                    updated_at = $6
+                WHERE job_id = $1 AND video_id = $2
+            "#,
+        )
+        .bind(job.id())
+        .bind(job.video_id())
+        .bind(job.output_bucket_path())
+        .bind(job.status())
+        .bind(job.error())
+        .bind(job.updated_at())
+        .execute(&self.connection)
+        .await
+        {
+            Ok(_) => Ok(job.clone()),
+            Err(err) => {
+                println!("UPDATE JOB {:#?}", err);
+                Err("Error updating job".to_string())
+            }
+        };
     }
 }
