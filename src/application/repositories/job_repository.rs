@@ -63,41 +63,41 @@ impl<'a> JobRepository<'a> for JobRepositoryImplementation {
         return match sqlx::query(
             r#"
                 SELECT
-                    jb.id,
-                    jb.output_bucket_path,
-                    jb.status,
-                    jb.video_id,
-                    jb.error,
-                    jb.created_at,
-                    jb.updated_at
-                    vd.id,
-                    vd.resource_id,
-                    vd.file_path,
-                    vd.created_at
+                    jb.job_id as jb_id,
+                    jb.output_bucket_path as jb_output_bucket_path,
+                    jb.status as jb_status,
+                    jb.video_id as jb_video_id,
+                    jb.error as jb_error,
+                    jb.created_at as jb_created_at,
+                    jb.updated_at as jb_updated_at,
+                    vd.id as vd_id,
+                    vd.resource_id as vd_resource_id,
+                    vd.file_path as vd_file_path,
+                    vd.created_at as vd_created_at
                 FROM jobs jb
                 LEFT JOIN videos vd
                 ON jb.video_id = vd.id
-                WHERE id = $1
+                WHERE jb.job_id = $1
             "#,
         )
         .bind(id)
         .map(|row| {
             let video = Video::new(
-                row.get::<Uuid, &str>("vd.id").to_string(),
-                row.get::<Uuid, &str>("vd.resource_id").to_string(),
-                row.get::<String, &str>("vd.file_path"),
-                row.get::<NaiveDateTime, &str>("vd.created_at"),
+                row.get::<Uuid, &str>("vd_id").to_string(),
+                row.get::<Uuid, &str>("vd_resource_id").to_string(),
+                row.get::<String, &str>("vd_file_path"),
+                row.get::<NaiveDateTime, &str>("vd_created_at"),
             );
             let video_ref: &'a Video = Box::leak(Box::new(video));
             Job::from(
-                row.get::<Uuid, &str>("jb.id").to_string(),
-                row.get::<String, &str>("jb.output_bucket_path"),
-                row.get::<String, &str>("status"),
+                row.get::<Uuid, &str>("jb_id").to_string(),
+                row.get::<String, &str>("jb_output_bucket_path"),
+                row.get::<String, &str>("jb_status"),
                 video_ref,
-                row.get::<Uuid, &str>("jb.video_id").to_string(),
-                row.get::<Option<String>, &str>("jb.error"),
-                row.get::<NaiveDateTime, &str>("jb.created_at"),
-                row.get::<NaiveDateTime, &str>("jb.updated_at"),
+                row.get::<Uuid, &str>("jb_video_id").to_string(),
+                row.get::<Option<String>, &str>("jb_error"),
+                row.get::<NaiveDateTime, &str>("jb_created_at"),
+                row.get::<NaiveDateTime, &str>("jb_updated_at"),
             )
             .unwrap()
         })
