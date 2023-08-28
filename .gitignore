@@ -1,2 +1,4 @@
 target/
 config/bucket-credential.json
+.env
+tmp/

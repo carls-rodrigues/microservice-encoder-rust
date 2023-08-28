@@ -18,7 +18,7 @@ impl Database {
     }
     pub async fn new_db_test() -> PgPool {
         let db = Database::new(
-            "postgres://postgres:root@localhost:5432/encoder?sslmode=disable".to_string(),
+            "postgres://postgres:root@db:5432/encoder?sslmode=disable".to_string(),
             true,
             "test".to_string(),
         );
