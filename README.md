@@ -62,9 +62,3 @@ For community discussions and support, join our official [Discord channel](https
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-*Disclaimer: This project is not affiliated with or endorsed by any of the mentioned external services or platforms.*
-
-*Please note that this README is a template and should be customized to accurately reflect your project.*
