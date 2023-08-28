@@ -38,7 +38,7 @@ To begin using the Rust Video Encoder:
 
 2. **Clone the Repository**: Clone this repository to your local machine:
    ```sh
-   git clone https://github.com/your-username/rust-video-encoder.git
+   git clone https://github.com/carlsrodrigues/rust-video-encoder-service.git
    ```
 
 3. **Configure Google Cloud Storage**: Set up your Google Cloud Storage credentials and configuration.
@@ -48,17 +48,3 @@ To begin using the Rust Video Encoder:
    cd rust-video-encoder
    cargo run
    ```
-
-5. **Submit Encoding Jobs**: Use the provided API endpoints to submit video encoding jobs and retrieve the results.
-
-For detailed API documentation, refer to the [API Guide](docs/api_guide.md).
-
-## Contributions and Support
-
-Contributions to the Rust Video Encoder project are welcome! If you encounter issues or have suggestions, please submit an issue on the [GitHub repository](https://github.com/your-username/rust-video-encoder).
-
-For community discussions and support, join our official [Discord channel](https://discord.gg/rust-video-encoder).
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
