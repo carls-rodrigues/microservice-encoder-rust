@@ -4,11 +4,18 @@ services:
 
   app:
     build: .
+    container_name: encoder
+    env_file:
+      - .env
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GOOGLE_CLOUD_STORAGE_BUCKET=${GOOGLE_CLOUD_STORAGE_BUCKET}
+      - LOCAL_STORAGE_PATH=${LOCAL_STORAGE_PATH}
     volumes:
       - .:/app
-
   db:
     image: postgres:15-alpine3.18
+    container_name: encoder_db
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     ports:
@@ -17,3 +24,17 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: encoder
+
+  migration_runner:
+    image: rust:1.71
+    container_name: migration_runner
+    working_dir: /app
+    command: "bash -c 'cargo install sqlx-cli --no-default-features --features native-tls,postgres && sqlx database setup'"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
