@@ -40,7 +40,7 @@ pub mod tests {
         assert!(fragment.is_ok());
         let encode = video_service.encode().await;
         assert!(encode.is_ok());
-        // let finish = video_service.finish().await;
-        // assert!(finish.is_ok());
+        let finish = video_service.finish().await;
+        assert!(finish.is_ok());
     }
 }
