@@ -1,4 +1,4 @@
-# Rust Video Encoder with Hexagonal Architecture
+# Rust Microserviço Encoder with Hexagonal Architecture
 
 ## Environment Setup
 To run in development mode, follow these steps:
@@ -35,17 +35,17 @@ For a message to be parsed by the encoder system, it must arrive in the followin
 Processing Success:
 For each successfully processed video, the encoder will send the processing result to an exchange (to be configured in `.env`).
 
-If the processing was successfully completed, the JSON return pattern will be:
+If the processing is successfully completed, the JSON return pattern will be:
 
 ```json
 {
-    "id":"bbbdd123-ad05-4dc8-a74c-d63a0a2423d5",
-    "output_bucket_path":"codeeducationtest",
-    "status":"COMPLETED",
+    "id": "bbbdd123-ad05-4dc8-a74c-d63a0a2423d5",
+    "output_bucket_path": "bucket-name",
+    "status": "COMPLETED",
     "video":{
         "encoded_video_folder":"b3f2d41e-2c0a-4830-bd65-68227e97764f",
         "resource_id":"aadc5ff9-0b0d-13ab-4a40-a11b2eaa148c",
-        "file_path":"convite.mp4"
+        "file_path":"video.mp4"
     },
     "Error":"",
     "created_at":"2020-05-27T19:43:34.850479-04:00",
@@ -55,7 +55,7 @@ If the processing was successfully completed, the JSON return pattern will be:
 Here, `encoded_video_folder` is the folder containing the converted video.
 
 Processing Error:
-If the processing encountered an error, the JSON return pattern will be:
+If the processing encounters an error, the JSON return pattern will be:
 
 ```json
 {
