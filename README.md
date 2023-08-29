@@ -1,4 +1,4 @@
-# Rust Microserviço Encoder with Hexagonal Architecture
+# Rust Microservice Encoder with Hexagonal Architecture
 
 ## Environment Setup
 To run in development mode, follow these steps:
